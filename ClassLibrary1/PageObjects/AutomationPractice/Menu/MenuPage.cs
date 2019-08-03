@@ -1,5 +1,6 @@
 ﻿
 using OpenQA.Selenium;
+using PageObjectLibrary.AutomationPractice.ContactUs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,12 @@ namespace PageObjectLibrary.AutomationPractice.Menu
             this.webDriver = webDriver;
         }
 
-        public void ClickContactUs()
+        public ContactUsPage ClickContactUs()
         {
             IWebElement contactUsButton = webDriver.FindElement(By.Id("contact-link"));
             contactUsButton.Click();
+            ContactUsPage contactUsPage = new ContactUsPage(webDriver);
+            return contactUsPage;
         }
     }
 }

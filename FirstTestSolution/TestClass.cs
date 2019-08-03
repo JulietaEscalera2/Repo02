@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using ClassLibrary1.Steps.AutomationPractice.Navegation;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
@@ -8,33 +9,40 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FirstTestSolution
 {
     //decorator para el unit test (en esta clase existen test)
     [TestClass]
-    public class Class1
+    public class TestClass
     {
 
         IWebDriver webDriver;
-        public Class1()
+        NavigationSteps navigationSteps;
+
+        public TestClass()
         {
-            webDriver = new ChromeDriver(@"C:\SeleniumWebDrivers");
+          /*  webDriver = new ChromeDriver(@"C:\SeleniumWebDrivers");
+            navigationSteps = new NavigationSteps(webDriver);*/
         }
 
-        [TestMethod]
-        public void MyFirstTest()
+        [TestMethod, TestCategory("ContactUs")]
+        // verifica que el formulario de customer service se envia correctamente
+        public void ContactUsFormIsSendCorrectly()
         {
             //navigate to automation practice site
-            webDriver.Navigate().GoToUrl("http://automationpractice.com/index.php?");
+           // webDriver.Navigate().GoToUrl("http://automationpractice.com/index.php?");
 
-            MenuPage menuPage = new MenuPage(webDriver);
-            menuPage.ClickContactUs();
+            /* MenuPage menuPage = new MenuPage(webDriver);
+             menuPage.ClickContactUs();*/
+            ContactUsPage contactUsPage = navigationSteps.NavigateToContactUs();
 
-            ContactUsPage contactUsPage = new ContactUsPage(webDriver);
+            Thread.Sleep(TimeSpan.FromSeconds(10));
+            //ContactUsPage contactUsPage = new ContactUsPage(webDriver);
 
-            contactUsPage.FillContactUsForm(ContactUsPage.Options.ByText, "Customer service", "juan.pablo.delgadillo.peredo@gmail.com", "1234", @"C:\test.txt", "Hola, compraste esto");
+            contactUsPage.FillContactUsForm(ContactUsPage.Options.ByText, "Customer service", "@gmail.com", "1234", @"C:\test.txt", "Hola, compraste esto");
 
             string actualMessage = contactUsPage.GetConfirmationMessage();
             string expectedMessage = "Your message has been successfully sent to our team.";
@@ -42,6 +50,36 @@ namespace FirstTestSolution
             Assert.AreEqual(expectedMessage, actualMessage);
         }
 
+        /*
+         * Assembly --->a nivel de proyecto
+         * Class Initialize
+         * Inicialize
+         * Test
+         * tear down
+         * class teardown
+         * Assembly
+         
+         */
+        [TestInitialize]
+        public void setUp()
+        {
+            webDriver = new ChromeDriver(@"C:\SeleniumWebDrivers");
+
+            //waiter implisito
+            webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
+            //waiter page
+            webDriver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(120);
+
+            navigationSteps = new NavigationSteps(webDriver);
+            webDriver.Navigate().GoToUrl("http://automationpractice.com/index.php?");
+        }
+
+        [TestCleanup]
+        public void tearDown()
+        {
+            webDriver.Close();
+            webDriver.Quit();
+        }
         /*
         public void MyFirstTest()
         {
@@ -90,8 +128,8 @@ namespace FirstTestSolution
 
         }*/
 
-        [TestMethod]
-        public void SecondTest()
+        [TestMethod, TestCategory("Contact us invalid data")]
+        public void ContactUsFormIsNotSentWithInvalidData()
         {
             webDriver.Navigate().GoToUrl("http://automationpractice.com/index.php?");
 
