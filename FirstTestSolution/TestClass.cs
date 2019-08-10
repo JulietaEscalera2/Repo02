@@ -38,11 +38,14 @@ namespace FirstTestSolution
             /* MenuPage menuPage = new MenuPage(webDriver);
              menuPage.ClickContactUs();*/
             ContactUsPage contactUsPage = navigationSteps.NavigateToContactUs();
-
+            //waiter for time
             Thread.Sleep(TimeSpan.FromSeconds(10));
+            //waiter for expected conditions
+
+            
             //ContactUsPage contactUsPage = new ContactUsPage(webDriver);
 
-            contactUsPage.FillContactUsForm(ContactUsPage.Options.ByText, "Customer service", "@gmail.com", "1234", @"C:\test.txt", "Hola, compraste esto");
+            contactUsPage.FillContactUsForm(ContactUsPage.Options.ByText, "Customer service", "julieta.escalera@gmail.com", "1234", @"C:\test.txt", "Hola, compraste esto");
 
             string actualMessage = contactUsPage.GetConfirmationMessage();
             string expectedMessage = "Your message has been successfully sent to our team.";
