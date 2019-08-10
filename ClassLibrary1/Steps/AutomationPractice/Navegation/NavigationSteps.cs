@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using ClassLibrary1.PageObjects.AutomationPractice.Buy;
+using ClassLibrary1.PageObjects.AutomationPractice.Menu;
+using OpenQA.Selenium;
 using PageObjectLibrary.AutomationPractice.ContactUs;
 using PageObjectLibrary.AutomationPractice.Menu;
 using System;
@@ -24,5 +26,19 @@ namespace ClassLibrary1.Steps.AutomationPractice.Navegation
             ContactUsPage contactUsPage = menuPage.ClickContactUs();
             return contactUsPage;
         }
+
+        public SingInPage NavigateToSingIn()
+        {
+            MenuPage menuPage = new MenuPage(webDriver);
+            SingInPage singInPage = menuPage.ClickSingIn();
+            return singInPage;
+
+        }
+
+        public CustomerPage NavigateToSelectDress()
+        {
+            BlockTopMenu dressTopMenu = new BlockTopMenu(webDriver);
+        }
+
     }
 }
